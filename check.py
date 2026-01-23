@@ -66,6 +66,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
-    for symbol in 'абвгдежзийклмнопрстуфхцчшщъыьэюяёіғңҷӧӱ':
-        print(repr(symbol), unicodedata.name(symbol))
+    main()
+
