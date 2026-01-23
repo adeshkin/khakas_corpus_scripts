@@ -50,18 +50,22 @@ def main():
 
     text = ' '.join(kjh_sents)
     print(repr(''.join(sorted(set(text)))))
-
-    assert 'іғңҷӦӧӰӱ' == 'іғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
-
-    for symbol in 'ACEFGHILMNPRSTUVWX[]acdefghiklmnorstuwy':
-        words = find_words_with_symbol(text, symbol)
-        if len(words) > 0:
-            print(repr(symbol))
-            print(unicodedata.name(symbol))
-            print(len(words))
-            print(*words, sep='\n')
-            print()
+    #
+    # assert 'іғңҷӦӧӰӱ' == 'іғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
+    #
+    # for symbol in 'абвгдежзийклмнопрстуфхцчшщъыьэюяёіғңҷӧӱ':
+    #     words = find_words_with_symbol(text, symbol)
+    #     if len(words) > 0:
+    #         print(repr(symbol))
+    #         print(unicodedata.name(symbol))
+    #         print(len(words))
+    #         print(*words, sep='\n')
+    #         print()
+    sorted_df = df.sort_values(by='kjh', key=lambda x: x.str.len())
+    sorted_df.to_csv(path.replace('.csv', '_sorted.csv'), index=False)
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    for symbol in 'абвгдежзийклмнопрстуфхцчшщъыьэюяёіғңҷӧӱ':
+        print(repr(symbol), unicodedata.name(symbol))
