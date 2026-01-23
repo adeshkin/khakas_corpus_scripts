@@ -4,8 +4,8 @@ import unicodedata
 
 
 def find_words_with_symbol(text, symbol):
-    # words = re.findall(r'\b\w*' + re.escape(symbol) + r'\w*\b', text)
-    words = re.findall(r'.{0,15}' + re.escape(symbol) + r'.{0,15}', text)
+    words = re.findall(r'\b\w*' + re.escape(symbol) + r'\w*\b', text)
+    # words = re.findall(r'.{0,15}' + re.escape(symbol) + r'.{0,15}', text)
     return sorted(set(words))
 
 
@@ -32,26 +32,6 @@ def analyze_words(sentences):
     return list(set(latin_only_words)), list(set(mixed_words))
 
 
-def replace_symbols(text):
-    old_new_dict = {'ö': 'ӧ',
-                    'iскеркi': 'іскеркі',
-                    'Іскеркi': 'Іскеркі',
-                    'Немецтернiң': 'Немецтернің',
-                    'Чечiмеде': 'Чечімеде',
-                    'нимелерi': 'нимелері',
-                    'нимелерiне': 'нимелеріне',
-                    'сiлкер': 'сілкер',
-                    'сiрерге': 'сірерге',
-                    'Тelegram': 'Telegram',
-                    'Тwitter': 'Twitter'
-                    }
-
-    for ch1, ch2 in old_new_dict.items():
-        text = re.sub(ch1, ch2, text)
-
-    return text
-
-
 def find_lat_cyr_words(kjh_sents):
     lat_words, lat_cyr_words = analyze_words(kjh_sents)
     print('Latin-cyrillic words')
@@ -63,10 +43,8 @@ def find_lat_cyr_words(kjh_sents):
 
 
 def main():
-    path = '/home/adeshkin/khakas_projects/data/translation/test_corpus_yandex/test_yandex.csv'
+    path = '/home/adeshkin/khakas_projects/data/translation/test_corpus_yandex/test_yandex_clean.csv'
     df = pd.read_csv(path)
-    df.rename(columns={'Русский': 'rus', 'Хакасский (Ирина Максимовна Чебочакова)': 'kjh'}, inplace=True)
-    df['kjh'] = df['kjh'].apply(lambda x: replace_symbols(x))
     kjh_sents = df['kjh'].values.tolist()
     find_lat_cyr_words(kjh_sents)
 
@@ -75,7 +53,7 @@ def main():
 
     assert 'іғңҷӦӧӰӱ' == 'іғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
 
-    for symbol in '-–':
+    for symbol in 'ACEFGHILMNPRSTUVWX[]acdefghiklmnorstuwy':
         words = find_words_with_symbol(text, symbol)
         if len(words) > 0:
             print(repr(symbol))
@@ -83,8 +61,6 @@ def main():
             print(len(words))
             print(*words, sep='\n')
             print()
-
-    df.to_csv(path.replace('.csv', '_clean.csv'))
 
 
 if __name__ == '__main__':
