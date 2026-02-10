@@ -11,16 +11,16 @@ def find_words_with_symbol(text, symbol):
 
 
 def main():
-    path = '/home/adeshkin/khakas_projects/data/translation/little_prince/prince_kjh_ru_russian_khakas_done.csv'
+    path = '/home/adeshkin/khakas_projects/data/translation/flores/flores_devtest - 1_clean - fixed.csv'
     df = pd.read_csv(path)
-    df.rename(columns={'Хакасский (Редактор)': 'kjh'}, inplace=True)
+    # df.rename(columns={'Хакасский (Редактор)': 'kjh'}, inplace=True)
     kjh_sents = df['kjh'].values.tolist()
     text = ' '.join(kjh_sents)
     print(repr(''.join(sorted(set(text)))))
 
     assert 'ІіғңҷӦӧӰӱ' == 'ІіғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
 
-    for symbol in 'i':
+    for symbol in 'acioptm':
         words = find_words_with_symbol(text, symbol)
         if len(words) > 0:
             print(repr(symbol))
@@ -29,9 +29,9 @@ def main():
             print(*words, sep='\n')
             print()
 
-    df.to_csv(path.replace('.csv', '_clean.csv'))
-    sorted_df = df.sort_values(by='kjh', key=lambda x: x.str.len())
-    sorted_df.to_csv(path.replace('.csv', '_sorted.csv'), index=False)
+    # df.to_csv(path.replace('.csv', '_clean.csv'))
+    # sorted_df = df.sort_values(by='kjh', key=lambda x: x.str.len())
+    # sorted_df.to_csv(path.replace('.csv', '_sorted.csv'), index=False)
 
 
 if __name__ == '__main__':

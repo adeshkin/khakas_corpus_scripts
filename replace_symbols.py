@@ -40,23 +40,35 @@ def count_unique_chars(word):
     return len(latin_chars), len(cyrillic_chars)
 
 
+# old_new_dict = {'ö': 'ӧ',
+#                     'ÿ': 'ӱ',
+#                     'ӊ': 'ң',
+#                     'Ӏ': 'І',
+#                     'Мanagement': 'Management',
+#                     'А1GP': 'A1GP',
+#                     'iкi': 'ікі',
+#                     'АОL': 'AOL',
+#                     'Iкi': 'Ікі',
+#                     'cellа': 'cella',
+#                     'СafeNet': 'CafeNet',
+#                     'ҷi': 'ҷі',
+#                     'Аpollo': 'Apollo',
+#                     'Коnami': 'Konami',
+#                     'COVІD': 'COVID',
+#                     'АNSA': 'ANSA'
+#                     }
+
 def replace_symbols(text):
-    old_new_dict = {'ö': 'ӧ',
+    old_new_dict = {'\xa0': ' ',
+                    'ö': 'ӧ',
                     'ÿ': 'ӱ',
                     'ӊ': 'ң',
                     'Ӏ': 'І',
-                    'Мanagement': 'Management',
-                    'А1GP': 'A1GP',
+                    'ӌ': 'ҷ',
                     'iкi': 'ікі',
-                    'АОL': 'AOL',
-                    'Iкi': 'Ікі',
-                    'cellа': 'cella',
-                    'СafeNet': 'CafeNet',
-                    'ҷi': 'ҷі',
-                    'Аpollo': 'Apollo',
-                    'Коnami': 'Konami',
-                    'COVІD': 'COVID',
-                    'АNSA': 'ANSA'
+                    'iс': 'іс',
+                    'ХIV': 'XIV',
+                    'ХI': 'XI',
                     }
 
     for ch1, ch2 in old_new_dict.items():
@@ -64,7 +76,8 @@ def replace_symbols(text):
 
     return text
 
-def fix_mixed_letters_i(text):
+
+def fix_mixed_letters_i_c(text):
     def replace_match(match):
         word = match.group(0)
 
@@ -100,11 +113,11 @@ def find_lat_cyr_words(kjh_sents):
 
 
 def main():
-    path = '/home/adeshkin/khakas_projects/data/translation/flores/flores_dev - 1.csv'
+    path = '/home/adeshkin/khakas_projects/data/translation/flores/flores_devtest - 1.csv'
     df = pd.read_csv(path)
     df.rename(columns={'Русский': 'rus', 'Хакасский (Редактор)': 'kjh'}, inplace=True)
     df['kjh'] = df['kjh'].apply(lambda x: replace_symbols(x))
-    df['kjh'] = df['kjh'].apply(lambda x: fix_mixed_letters_i(x))
+    df['kjh'] = df['kjh'].apply(lambda x: fix_mixed_letters_i_c(x))
     kjh_sents = df['kjh'].values.tolist()
 
     find_lat_cyr_words(kjh_sents)
@@ -114,13 +127,14 @@ def main():
 
     assert 'ІіғңҷӦӧӰӱ' == 'ІіғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
 
-    for symbol in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz':
+    for symbol in '':
         words = find_words_with_symbol(text, symbol)
         if len(words) > 0:
             print(repr(symbol))
             print(unicodedata.name(symbol))
             print(len(words))
-            print(*words, sep='\n')
+            # print(*words, sep='\n')
+            print(words)
             print()
 
     df.to_csv(path.replace('.csv', '_clean.csv'))
