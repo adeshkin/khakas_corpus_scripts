@@ -79,5 +79,14 @@ def main1():
     df.to_csv("/home/adeshkin/khakas_projects/data/translation/common_voice/spontaneous-speech_ru_tyv_ba_ky_kk.csv")
 
 
+def prepare_for_kjh_translate():
+    path = "/home/adeshkin/Downloads/Абумова Ольга Дмитриевна - 2026 - spont_common_voice (1).csv"
+    df = pd.read_csv(path)
+    # df = df.drop_duplicates('Русский')
+    print(df['Русский'][df['Русский'].duplicated()])
+    sorted_df = df.sort_values(by='Русский', key=lambda x: x.str.len())
+    sorted_df.to_csv(path.replace('.csv', '- sorted.csv'), index=False)
+
+
 if __name__ == '__main__':
-    main1()
+    prepare_for_kjh_translate()
