@@ -1,3 +1,6 @@
 pandas
 pypdf
 fluent.syntax
+requests
+gsutil
+openpyxl

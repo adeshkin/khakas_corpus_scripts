@@ -1,1 +1,0 @@
-# khakas_corpus_scripts
