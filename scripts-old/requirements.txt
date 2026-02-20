@@ -1,0 +1,7 @@
+pandas
+pylcs
+openpyxl
+pymorphy3
+pymorphy3-dicts-ru
+pyspellchecker
+nltk
