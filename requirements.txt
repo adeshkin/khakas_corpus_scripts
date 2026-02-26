@@ -4,3 +4,4 @@ fluent.syntax
 requests
 gsutil
 openpyxl
+beautifulsoup4

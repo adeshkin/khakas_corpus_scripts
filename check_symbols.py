@@ -11,16 +11,19 @@ def find_words_with_symbol(text, symbol):
 
 
 def main():
-    path = '/home/adeshkin/khakas_projects/data/translation/flores/flores_devtest - 1_clean - fixed.csv'
+    path = '/home/adeshkin/Downloads/акция - перевести.csv'
     df = pd.read_csv(path)
     # df.rename(columns={'Хакасский (Редактор)': 'kjh'}, inplace=True)
-    kjh_sents = df['kjh'].values.tolist()
+    # df['Хакасский'] = df['Хакасский'].apply(lambda x: x.replace('J', 'Ӧ').replace('ӌ', 'ҷ').replace('ӊ', 'ң').replace('e', 'ӱ').replace('y', 'ң').replace('j', 'ӧ').replace('ö', 'ӧ').replace('x', 'ҷ').replace('u', 'ғ').replace('i', 'і'))
+    df['Хакасский'] = df['Хакасский'].apply(lambda x: x.replace('MУҢ', 'МУҢ').replace('Cағыссыратчатхан', 'Сағыссыратчатхан').replace('Cоонаң', 'Соонаң').replace('пазa', 'паза').replace('хоостыpa', 'хоостыра').replace('c', 'с'))
+
+    kjh_sents = df['Хакасский'].values.tolist()
     text = ' '.join(kjh_sents)
     print(repr(''.join(sorted(set(text)))))
 
     assert 'ІіғңҷӦӧӰӱ' == 'ІіғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
 
-    for symbol in 'acioptm':
+    for symbol in 'abcdefghklmnoprstuvwyz':
         words = find_words_with_symbol(text, symbol)
         if len(words) > 0:
             print(repr(symbol))
@@ -29,9 +32,9 @@ def main():
             print(*words, sep='\n')
             print()
 
-    # df.to_csv(path.replace('.csv', '_clean.csv'))
-    # sorted_df = df.sort_values(by='kjh', key=lambda x: x.str.len())
-    # sorted_df.to_csv(path.replace('.csv', '_sorted.csv'), index=False)
+    df.to_csv(path.replace('.csv', '_clean.csv'))
+    #sorted_df = df.sort_values(by='Русский', key=lambda x: x.str.len())
+    #sorted_df.to_csv(path.replace('.csv', '_sorted.csv'), index=False)
 
 
 if __name__ == '__main__':
