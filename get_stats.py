@@ -4,10 +4,13 @@ import pandas as pd
 
 
 def main():
-    path = '/home/adeshkin/khakas_projects/data/translation/parallel_corpus/khakas_russian_parallel_corpus_v1.csv'
-    df = pd.read_csv(path)
-    kjh_sents = df['Хакасский'].values.tolist()
-    text = ' '.join(kjh_sents)
+    # path = '/home/adeshkin/khakas_projects/data/translation/parallel_corpus/khakas_russian_parallel_corpus_v1.csv'
+    # df = pd.read_csv(path)
+    # kjh_sents = df['Хакасский'].values.tolist()
+    # text = ' '.join(kjh_sents)
+    with open('/home/adeshkin/khakas_projects/khakas-mt/data/final/mono_para_kjh.txt', 'r') as f:
+        text = f.read()
+
     text = text.lower()
 
     print(repr(''.join(sorted(set(text)))))

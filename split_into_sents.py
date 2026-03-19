@@ -4,7 +4,7 @@ import os
 from glob import glob
 
 
-def adaptive_chunking(text, max_words_per_chunk=10):
+def adaptive_chunking(text, max_words_per_chunk=15):
     # 1. Получаем список предложений
     sentences = [s.text for s in sentenize(text)]
 
@@ -57,13 +57,17 @@ def main():
             text = f.read()
         texts.append(text)
     all_text = '\n\n\n#####\n\n\n'.join(texts)
-    all_text = all_text.replace('\n', ' ').replace('#####', ' ')
 
-    chunks = adaptive_chunking(all_text)
+    with open(os.path.join(data_dir, 'raznoe.txt'), 'w', encoding='utf-8') as f:
+        f.write(all_text)
 
-    df = pd.DataFrame(chunks, columns=['Хакасский'])
-    print(len(df))
-    df.to_csv(f'{data_dir}/mono.csv', index=False)
+    # all_text = all_text.replace('#####', ' ')
+    #
+    # chunks = adaptive_chunking(all_text)
+    #
+    # df = pd.DataFrame(chunks, columns=['Хакасский'])
+    # print(len(df))
+    # df.to_csv(f'{data_dir}/raznoe_sents.csv', index=False)
 
 
 if __name__ == '__main__':
