@@ -46,18 +46,19 @@ def main():
     data = datasets.load_dataset("google/wmt24pp", "en-ru_RU", split="train").to_pandas()
     data = data[~data['is_bad_source']]
 
-    data['target_sents'] = data['target'].apply(split_sent)
-    all_sents = []
-    for target_sents, segment_id in data[['target_sents', 'segment_id']].values.tolist():
-        for i, target_sent in enumerate(target_sents):
-            all_sents.append((target_sent, i, segment_id))
+    # data['target_sents'] = data['target'].apply(split_sent)
+    # all_sents = []
+    # for target_sents, segment_id in data[['target_sents', 'segment_id']].values.tolist():
+    #     for i, target_sent in enumerate(target_sents):
+    #         all_sents.append((target_sent, i, segment_id))
 
-    df = pd.DataFrame(all_sents, columns=['Русский', 'id', 'segment_id'])
+    # df = pd.DataFrame(all_sents, columns=['Русский', 'segment_id'])
+    df = pd.DataFrame(data[['target', 'segment_id']].values.tolist(), columns=['Русский', 'segment_id'])
     print(len(df))
     df.drop_duplicates(subset='Русский', keep='first', inplace=True)
     print(len(df))
     for i in range(0, len(df), 200):
-        df[i:i + 200].to_csv(f'./google_wmt24pp_{i:04d}.csv', index=False)
+        df[i:i + 200].to_csv(f'./full_google_wmt24pp_{i:04d}.csv', index=False)
 
 
 if __name__ == '__main__':

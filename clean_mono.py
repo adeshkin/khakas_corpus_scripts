@@ -25,7 +25,6 @@ def analyze_words(sentences):
         for word in words:
             lat_count, cyr_count = count_unique_chars(word)
 
-
             has_latin = lat_count > 0
             # has_latin = 'y' in word
             has_cyrillic = cyr_count > 0
@@ -130,14 +129,11 @@ def replace_lat_cyr_kjh(text):
         if lat_count == 1 and 'I' in word and cyr_count > lat_count:
             word = word.replace('I', 'І')
 
-
         if lat_count == 1 and 'c' in word and cyr_count > lat_count:
             word = word.replace('c', 'с')
 
         if lat_count == 1 and 'C' in word and cyr_count > lat_count:
             word = word.replace('C', 'С')
-
-
 
         if lat_count == 1 and 'b' in word and cyr_count > lat_count:
             word = word.replace('b', 'і')
@@ -153,10 +149,6 @@ def replace_lat_cyr_kjh(text):
 
         if lat_count == 2 and 'i' in word and cyr_count > lat_count:
             word = word.replace('i', 'і')
-
-
-
-
 
         if lat_count == 1 and 'e' in word and cyr_count > lat_count:
             word = word.replace('e', 'ӱ')
@@ -217,7 +209,7 @@ def replace_kjh(text):
         'ӀӀ': 'II',
         'Ӏ': 'І',
         'ӏ': 'І',
-        '\ufeff' : ' ',
+        '\ufeff': ' ',
         '\xad': '',
 
         'Ö': 'ӧ',
@@ -229,7 +221,6 @@ def replace_kjh(text):
         'Қ': 'К',
         'ҡ': 'к',
         'ҫ': 'с',
-
 
         'phrasӱos': 'phraseos',
         'nеos': 'neos',
@@ -305,32 +296,31 @@ def replace_kjh(text):
         'ХIX': 'XIX',
         'ӱtңmon': 'etymon',
 
-
     }
     # pattern = r'[a-zA-Zа-яА-ЯёЁІіҒғҢңҶҷӦӧӰӱ]+'
     old_new_dict = {
         'j': 'ӧ', 'y': 'ң', 'e': 'ӱ',
-                    'b': 'і', 'u': 'ғ', 'x': 'ҷ',
-                    'i': 'і', 'I': 'І', 'E': 'Ӱ',
-                    'J': 'Ӧ', 'U': 'Ғ', 'c': 'с',
-                    'B': 'І', 'Y': 'Ң', 'C': 'С',
-                    'a': 'а', 'o': 'о', 'F': 'Ғ',
-                    'ӌ': 'ҷ', 'ӊ': 'ң',
-                    'XVІІ': 'XVII', 'VІ': 'VI', 'VІІІ': 'VIII',
-                    'XІ': 'XI', 'ІV': 'IV', 'XІX': 'XIX',
-                    'ХVІІІ': 'XVIII', 'VІІ': 'VII', 'ХVІІ': 'XVII',
-                    'ІX': 'IX',
-                    '\xad': '',
-                    '\ufeff': ' ',
+        'b': 'і', 'u': 'ғ', 'x': 'ҷ',
+        'i': 'і', 'I': 'І', 'E': 'Ӱ',
+        'J': 'Ӧ', 'U': 'Ғ', 'c': 'с',
+        'B': 'І', 'Y': 'Ң', 'C': 'С',
+        'a': 'а', 'o': 'о', 'F': 'Ғ',
+        'ӌ': 'ҷ', 'ӊ': 'ң',
+        'XVІІ': 'XVII', 'VІ': 'VI', 'VІІІ': 'VIII',
+        'XІ': 'XI', 'ІV': 'IV', 'XІX': 'XIX',
+        'ХVІІІ': 'XVIII', 'VІІ': 'VII', 'ХVІІ': 'XVII',
+        'ІX': 'IX',
+        '\xad': '',
+        '\ufeff': ' ',
 
-                    }
+    }
 
     old_new_dict = {
         'Ö': 'Ӧ',
         'ö': 'ӧ',
         'ÿ': 'ӱ',
         'ӊ': 'ң',
-        'ӌ': 'ҷ',
+        'p': 'ҷ',
         'ҳ': 'х',
         'Ӏ': 'І',
         '\ufeff': ' ',
@@ -369,8 +359,6 @@ def check_data():
     # text = replace_kjh(text)
     sents = [sent.text for sent in sentenize(text)]
 
-
-
     find_lat_cyr_words(sents, print_latin=False)
 
     with open('/home/adeshkin/khakas_projects/data/mono/bel.txt', 'w') as f:
@@ -382,7 +370,7 @@ def check_data():
     assert 'ІіҒғҢңҷӦӧӰӱ' == 'ІіҒғҢңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
 
     for symbol in ['\ufeff']:
-        #examples = find_word_with_symbol(text, symbol)
+        # examples = find_word_with_symbol(text, symbol)
         examples = find_context_with_symbol(text, symbol)
 
         if len(examples) > 0:
@@ -394,8 +382,93 @@ def check_data():
             print()
 
 
+def replace_kjh_vasyutkino_ozero(text):
+    old_new_dict = {
+        '\ufeff': ' ',
+        'u': 'ғ',
+        'E': 'Ӱ',
+        'I': 'І',
+        'J': 'Ӧ',
+        'i': 'і',
+        'j': 'ӧ',
+        'e': 'ӱ',
+        'x': 'ҷ',
+        'y': 'ң',
+
+    }
+    # ІіҒғҢңҶҷӦӧӰӱ
+    # {'j': 'ӧ', 'y': 'ң', 'e': 'ӱ', 'b': 'і', 'u': 'ғ', 'x': 'ҷ'}
+    for ch1, ch2 in old_new_dict.items():
+        text = re.sub(ch1, ch2, text)
+
+    return text
+
+
+def replace_ru_vasyutkino_ozero(text):
+    old_new_dict = {
+        'B': 'В',
+        'a': 'а',
+        'c': 'с',
+        'e': 'е',
+        'o': 'о',
+        'p': 'р',
+
+
+    }
+    # ІіҒғҢңҶҷӦӧӰӱ
+    # {'j': 'ӧ', 'y': 'ң', 'e': 'ӱ', 'b': 'і', 'u': 'ғ', 'x': 'ҷ'}
+    for ch1, ch2 in old_new_dict.items():
+        text = re.sub(ch1, ch2, text)
+
+    return text
+
+from preprocess_text import preproc
+def check_data_vasyutkino_ozero():
+    path = '/home/adeshkin/khakas_projects/khakas-sent-emb/data/vasyutkino_ozero/kjh_text_2.txt'
+
+    with open(path, 'r') as f:
+        text = f.read()
+    text = replace_kjh_vasyutkino_ozero(text)
+    # text = replace_ru_vasyutkino_ozero(text)
+    parts = []
+    for part in text.split('\n'):
+        part = preproc(part)
+        if len(part) > 0:
+            parts.append(part)
+
+    with open('/home/adeshkin/khakas_projects/khakas-sent-emb/data/vasyutkino_ozero/kjh_fixed.txt', 'w') as f:
+        for part in parts:
+            f.write(part + '\n')
+
+    # text = replace_kjh(text)
+    # text = replace_lat_cyr_kjh(text)
+    # text = replace_lat_cyr_kjh(text)
+    # text = replace_lat_cyr_kjh(text)
+    # text = replace_kjh(text)
+    # sents = [sent.text for sent in sentenize(text)]
+    #
+    # find_lat_cyr_words(sents, print_latin=False)
+    #
+    # with open('/home/adeshkin/khakas_projects/data/mono/bel.txt', 'w') as f:
+    #     f.write(text)
+
+    print(repr(''.join(sorted(set(text)))))
+    print()
+
+    # assert 'ІіҒғҢңҷӦӧӰӱ' == 'ІіҒғҢңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
+    #
+    # for symbol in 'Baceop':
+    #     # examples = find_word_with_symbol(text, symbol)
+    #     examples = find_context_with_symbol(text, symbol)
+    #
+    #     if len(examples) > 0:
+    #         print(repr(symbol))
+    #         print(unicodedata.name(symbol))
+    #         print(len(examples))
+    #         # print(*examples, sep='\n')
+    #         print(examples)
+    #         print()
+
+
 if __name__ == "__main__":
-    # join_cyr()
-    # join_bel()
-    # join_mix()
-    check_data()
+    check_data_vasyutkino_ozero()

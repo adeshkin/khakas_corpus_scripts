@@ -6,3 +6,5 @@ gsutil
 openpyxl
 beautifulsoup4
 razdel
+sacremoses
+scikit-learn

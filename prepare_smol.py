@@ -6,7 +6,7 @@ def main():
     df = pd.read_csv('/home/adeshkin/Downloads/smolsent_kjh - Sheet1.csv')
     # df = df.fillna('')
     # df = df.dropna(subset=['Translation АНИСИМОВ'])
-    df['Translation АНИСИМОВ'] = df['Translation АНИСИМОВ'].apply(lambda x: re.sub(r'[^\w]|_', '', x.strip().replace(' ', '')))
+    df['Translation АНИСИМОВ'] = df['Translation АНИСИМОВ'].apply(lambda x: re.sub(r'\W|_', '', x.strip().replace(' ', '')))
     df['Русский'] = df['Русский'].apply(lambda x: re.sub(r'[^\w]|_', '', x.strip().replace(' ', '')))
     print(len(df[df['Translation АНИСИМОВ'] != df['Русский']][['Translation АНИСИМОВ', 'Русский']].values))
     print(df[df['Translation АНИСИМОВ'] != df['Русский']][['Translation АНИСИМОВ', 'Русский']].values)
