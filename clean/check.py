@@ -1,7 +1,10 @@
+import os
+import sys
 import pandas as pd
 import re
 import unicodedata
 
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'prepare'))
 from prepare_smol import fix_symbols
 
 
