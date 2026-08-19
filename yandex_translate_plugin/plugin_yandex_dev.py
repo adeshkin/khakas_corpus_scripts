@@ -1,4 +1,4 @@
-# based on https://github.com/janvarev/onering_plugins_chrome_dev
+# based on https://github.com/adeshkin/onering_plugins_chrome_dev
 
 import json
 import os
