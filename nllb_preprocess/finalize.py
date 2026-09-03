@@ -313,5 +313,14 @@ def main_final_cv():
     df.to_csv('/home/adeshkin/Downloads/common_voice - life_fix_finalize.csv', index=False)
 
 
+def main_ru_kjh_base():
+    df = pd.read_csv("/home/adeshkin/Downloads/ru-kjh_fixlist_check.xlsx - Лист1.csv")
+    print(df.columns)
+    for col in df.columns:
+        print(col)
+        df[col] = df[col].apply(lambda x: detok_space_norm(preproc_data(x)).strip())
+
+    df.to_csv("/home/adeshkin/Downloads/ru-kjh_fixlist_check.xlsx - Лист1_finalize.csv", index=False)
+
 if __name__ == '__main__':
-    main_final_cv()
+    main_ru_kjh_base()
