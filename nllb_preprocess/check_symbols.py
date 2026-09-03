@@ -116,6 +116,14 @@ def check_lat_cyr_word():
     find_lat_cyr_words(k_sents, print_latin=False)
 
 
+def check_lat_cyr_word1():
+    df = pd.read_csv('/home/adeshkin/Downloads/diversity500_khakas.xlsx - Лист1.csv')
+    r_sents = df['русский'].tolist()
+    k_sents = df['хакасский'].tolist()
+
+    find_lat_cyr_words(r_sents, print_latin=False)
+    find_lat_cyr_words(k_sents, print_latin=False)
+
 if __name__ == '__main__':
     # check_symbols()
-    check_lat_cyr_word()
+    check_lat_cyr_word1()
