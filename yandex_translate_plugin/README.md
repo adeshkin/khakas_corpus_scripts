@@ -44,7 +44,7 @@ curl -s http://127.0.0.1:9222/json/list | head
 ### 2. Запустить перевод
 
 ```bash
-python yandex_translate_csv_ru_kjh.py /home/adeshkin/Downloads/ru_alpaca_seed_tasks_splitted.csv
+python yandex_translate_csv_ru_kjh.py /home/adeshkin/khakas_projects/khakas_corpus_scripts/coregrammar_dataset/coregrammar_dataset/output/coregrammar_100000/sentences_100/sentences_001.csv
 ```
 
 Результат по умолчанию — `путь/к/файлу_kjh.csv`: все исходные колонки плюс новая колонка `kjh`.

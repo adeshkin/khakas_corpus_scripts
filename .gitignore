@@ -1,3 +1,5 @@
+coregrammar_dataset/cache
+coregrammar_dataset/coregrammar_dataset
 .idea
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -206,3 +208,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+/gatitos_review/russian-khakas-literary-dict.csv
+/gatitos_review/russian-khakas-base-phrases.csv
+/gatitos_review/khakas-russian-dict.csv
+/gatitos_review/khakas-explanatory-dict.csv
+/gatitos_review/gatitos_en_ru_kjh_reviewed_manually_reviewed.csv
+/gatitos_review/gatitos_en_ru_kjh_reviewed.csv
+/gatitos_review/gatitos_en_original_ru_google_kjh_yandex - 1.csv
+/gatitos_review/.gatitos_en_ru_kjh_reviewed_manually_reviewed.csv.lock

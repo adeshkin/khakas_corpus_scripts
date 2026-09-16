@@ -1,0 +1,2 @@
+{"id": "ru-1", "locale": "ru-RU", "utt": "Поставь будильник на семь часов", "scenario": "alarm", "intent": "alarm_set"}
+{"id": "en-1", "locale": "en-US", "utt": "Set an alarm", "scenario": "alarm", "intent": "alarm_set"}

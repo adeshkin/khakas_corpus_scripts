@@ -1,0 +1,76 @@
+sources:
+  tatoeba:
+    percentage: 75
+    enabled: true
+    url: https://downloads.tatoeba.org/exports/per_language/rus/rus_sentences_detailed.tsv.bz2
+    native_users_url: https://downloads.tatoeba.org/exports/per_language/rus/rus_user_languages.tsv.bz2
+  common_voice:
+    percentage: 15
+    enabled: true
+    revision: 7c6203913a727580d604ea4c0c8daca4f62ac4e3
+    url: https://raw.githubusercontent.com/common-voice/common-voice/7c6203913a727580d604ea4c0c8daca4f62ac4e3/server/data/ru/sentence-collector.txt
+  massive:
+    percentage: 10
+    enabled: true
+    revision: ff6bd8e4b27c3543e4f8fe2108f32bb95a6f8740
+
+constructions:
+  simple_clause: 18
+  question: 10
+  negation_prohibition: 8
+  imperative_request: 8
+  possession_modality_impersonal: 12
+  motion_location: 12
+  temporal_aspectual: 12
+  relative_attributive: 12
+  condition_cause_purpose_concession: 5
+  dialogue_ellipsis: 3
+
+filters:
+  min_tokens: 4
+  max_tokens: 18
+  dialogue_min_tokens: 2
+  cyrillic_ratio: 0.80
+  blocked_terms:
+    - организация объединенных наций
+    - совет безопасности
+    - генеральная ассамблея
+    - настоящее постановление
+    - в соответствии с законодательством
+    - уполномоченный орган
+
+selection:
+  oversample_factor: 3
+
+output:
+  reserve_percentage: 20
+  max_rejected_rows: 100000
+
+blocklists:
+  - dataset: adeshkin/khakas-russian-parallel-corpus
+    split: train
+    fields: [ru]
+  - dataset: adeshkin/google-smol-en-ru-kjh
+    config: smolsent
+    split: train
+    fields: [ru]
+  - dataset: adeshkin/google-smol-en-ru-kjh
+    config: smoldoc
+    split: train
+    fields: [ru]
+  - dataset: openlanguagedata/flores_plus
+    config: rus_Cyrl
+    split: dev
+    fields: [text, sentence]
+  - dataset: openlanguagedata/flores_plus
+    config: rus_Cyrl
+    split: devtest
+    fields: [text, sentence]
+  - dataset: facebook/bouquet
+    config: rus_Cyrl
+    split: dev
+    fields: [src_text]
+  - dataset: facebook/bouquet
+    config: rus_Cyrl
+    split: test
+    fields: [src_text]
