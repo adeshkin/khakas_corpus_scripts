@@ -112,34 +112,66 @@ def find_lat_cyr_words(kjh_sents):
     print(len(lat_cyr_words))
 
 
+def replace_symbols_alise(text):
+    old_new_dict = {
+                    'ӌ': 'ҷ',
+        "ІV": 'IV',
+        "VІІІ": 'VIII',
+        "Prіma": 'Prima',
+        "Cығарғаны": 'Сығарғаны',
+        "Oғырлаан": 'Оғырлаан',
+        "Oйыны": 'Ойыны',
+        "Tertіa": 'Tertia',
+        "Cӱмекчін": 'Сӱмекчін',
+        "XІ": 'XI',
+        "VІ": 'VI',
+        "XIІ": 'XII',
+
+        "Cӱмекчізі": 'Сӱмекчізі',
+        "XІІ": 'XII',
+        "Xалазахтарны": 'Халазахтарны',
+        "ІX": 'IX',
+        "Cірер": 'Сірер',
+        "VIІ": 'VII',
+
+    }
+
+    for ch1, ch2 in old_new_dict.items():
+        text = re.sub(ch1, ch2, text)
+
+    return text
+
+
 def main():
-    path = '/home/adeshkin/khakas_projects/data/translation/flores/flores_devtest - 1.csv'
+    path = '/home/adeshkin/Downloads/Алисаның Хайхастар Чирінзер чорығы [Алиса в стране чудес] - Льюис Кэрролл - Portlaoise_ Evertype, 2017 - перевод А. Щербаков _ М.Д. Чертыкова.csv'
     df = pd.read_csv(path)
-    df.rename(columns={'Русский': 'rus', 'Хакасский (Редактор)': 'kjh'}, inplace=True)
-    df['kjh'] = df['kjh'].apply(lambda x: replace_symbols(x))
-    df['kjh'] = df['kjh'].apply(lambda x: fix_mixed_letters_i_c(x))
-    kjh_sents = df['kjh'].values.tolist()
+    # df.rename(columns={'Русский': 'rus', 'Хакасский': 'kjh'}, inplace=True)
+    df = df.fillna('')
+    df['Хакасский'] = df['Хакасский'].apply(lambda x: replace_symbols_alise(x))
+    # df['kjh'] = df['kjh'].apply(lambda x: fix_mixed_letters_i_c(x))
+    kjh_sents = df['Хакасский'].values.tolist()
 
     find_lat_cyr_words(kjh_sents)
 
     text = ' '.join(kjh_sents)
     print(repr(''.join(sorted(set(text)))))
 
-    assert 'ІіғңҷӦӧӰӱ' == 'ІіғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
-
-    for symbol in '':
-        words = find_words_with_symbol(text, symbol)
-        if len(words) > 0:
-            print(repr(symbol))
-            print(unicodedata.name(symbol))
-            print(len(words))
-            # print(*words, sep='\n')
-            print(words)
-            print()
-
+    assert 'іғңҷӦӧӰӱ' == 'іғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
+    #
+    # for symbol in '':
+    #     words = find_words_with_symbol(text, symbol)
+    #     if len(words) > 0:
+    #         print(repr(symbol))
+    #         print(unicodedata.name(symbol))
+    #         print(len(words))
+    #         # print(*words, sep='\n')
+    #         print(words)
+    #         print()
+    #
     df.to_csv(path.replace('.csv', '_clean.csv'))
-    sorted_df = df.sort_values(by='kjh', key=lambda x: x.str.len())
-    sorted_df.to_csv(path.replace('.csv', '_sorted.csv'), index=False)
+
+    # sorted_df = df.sort_values(by='kjh', key=lambda x: x.str.len())
+    # sorted_df.to_csv(path.replace('.csv', '_sorted.csv'), index=False)
 
 
 if __name__ == '__main__':

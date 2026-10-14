@@ -859,9 +859,101 @@ def fix_klr():
     df.to_csv(save_path, index=False)
 
 
+def replace_bouquet(text):
+    old_new_dict = {'ö': 'ӧ',
+                    '\u200b': ' ',
+                    'Iзiг': 'Ізiг', 
+                    'Iзе': 'Ізе',
+                    'Iкi': 'Ікi', 
+                    'Iкiнҷiзiн': 'Ікiнҷiзiн',
+                    'Iскеркi': 'Іскеркi',
+                    'Iҷе': 'Іҷе',
+                    'ҷi': 'ҷі',
+                    'iкi': 'ікі',
+                    'cахтапчам': 'сахтапчам'
+                    }
+
+    for ch1, ch2 in old_new_dict.items():
+        text = re.sub(ch1, ch2, text)
+
+    return text
+
+def replace_lat_cyr_bouquet(text):
+    def replace_match(match):
+        word = match.group(0)
+
+        lat_count, cyr_count = count_unique_chars(word)
+
+        if lat_count == 1 and 'i' in word and cyr_count > lat_count:
+            word = word.replace('i', 'і')
+
+        if lat_count == 1 and 'I' in word and cyr_count > lat_count:
+            word = word.replace('I', 'І')
+
+        if lat_count == 1 and 'C' in word and cyr_count > lat_count:
+            word = word.replace('C', 'С')
+
+        # if lat_count == 1 and 'c' in word and cyr_count > lat_count:
+        #     word = word.replace('c', 'с')
+
+        # if lat_count == 1 and 'O' in word and cyr_count > lat_count:
+        #     word = word.replace('O', 'О')
+
+        return word
+
+    pattern = r'[a-zA-Zа-яА-ЯёЁІіҒғҢңҶҷӦӧӰӱ]+'
+    return re.sub(pattern, replace_match, text)
+
+def replace_bouquet_test(text):
+    old_new_dict = {'ӊ': 'ң',
+                    'ӌ': 'ҷ',
+                    ' ̃ӱчӱн,': ' ӱчӱн,',
+                    'ҷi': 'ҷі',
+                    'тимнeңер': 'тимнеңер'
+                    }
+
+    for ch1, ch2 in old_new_dict.items():
+        text = re.sub(ch1, ch2, text)
+
+    return text
+
+def fix_bouquet():
+    path = '/home/adeshkin/Downloads/bouquet_test_inserted_kjh_fix_symbols_finalize.csv'
+    save_path = '/home/adeshkin/Downloads/bouquet_test_inserted_fix_symbols.csv'
+    # assert not os.path.exists(save_path)
+    df = pd.read_csv(path)
+
+    #df['Русский'] = df['Русский'].apply(lambda x: replace_klr_ru(x).strip())
+    # df['kjh_Cyrl'] = df['kjh_Cyrl'].apply(lambda x: replace_lat_cyr_bouquet(replace_bouquet_test(x)))
+
+    sents = df['kjh_Cyrl'].tolist()
+
+    find_lat_cyr_words(sents, print_latin=False)
+
+    text = ' '.join(sents)
+    print(repr(''.join(sorted(set(text)))))
+    print()
+
+    assert 'іғҢңҷӦӧӰӱ' == 'іғҢңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
+
+    for symbol in '': # ACEIMOXaceikmop
+        examples = find_word_with_symbol(text, symbol)
+        # examples = find_context_with_symbol(text, symbol)
+
+        if len(examples) > 0:
+            print(repr(symbol))
+            print(unicodedata.name(symbol))
+            print(len(examples))
+            # print(*examples, sep='\n')
+            print(examples)
+            print()
+
+    # df.to_csv(save_path, index=False)
+
 if __name__ == '__main__':
-    fix_til()
-    fix_v1()
-    fix_vkloc()
-    fix_ecorpus()
-    fix_klr()
+    # fix_til()
+    # fix_v1()
+    # fix_vkloc()
+    # fix_ecorpus()
+    # fix_klr()
+    fix_bouquet()

@@ -38,4 +38,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    text = 'Алисаның Хайхастар Чирінзер чорығы'
+    print(repr(''.join(sorted(set(text)))))
+
+    assert 'іғң' == 'іғң'  # ІіҒғҢңҶҷӦӧӰӱ

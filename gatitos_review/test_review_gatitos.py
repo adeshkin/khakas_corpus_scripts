@@ -142,7 +142,7 @@ class ReviewGatitosTests(unittest.TestCase):
                 mr.review_file(path, input_fn=lambda _prompt: "", output=io.StringIO())
             self.assertEqual(path.read_text(encoding="utf-8"), original)
 
-    def test_manual_review_empty_command_clears_a_translation(self):
+    def test_manual_review_empty_command_is_literal_khakas_text(self):
         mr = self._manual_review_module()
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "review.csv"
@@ -161,8 +161,40 @@ class ReviewGatitosTests(unittest.TestCase):
             with path.open(encoding="utf-8", newline="") as handle:
                 row = next(csv.DictReader(handle))
             self.assertEqual(row["ru_manually_corrected"], "Артикль")
-            self.assertEqual(row["kjh_manually_corrected"], "")
+            self.assertEqual(row["kjh_manually_corrected"], "/empty")
             self.assertEqual(row["manual_reviewed"], "yes")
+
+    def test_manual_review_khakas_choices_and_restart(self):
+        mr = self._manual_review_module()
+        cases = [
+            ([""], "пиис"),
+            (["y", ""], "Пиис"),
+            (["b", ""], "Пиис; пиис"),
+            (["пӱӱр", ""], "пӱӱр"),
+            (["пӱӱр", "b", ""], "Пиис; пӱӱр"),
+        ]
+        for khakas_answers, expected in cases:
+            with self.subTest(answers=khakas_answers), tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / "review.csv"
+                self._write(path, [
+                    ["en", "ru_corrected", "kjh_from_ru_by_yandex", "kjh_corrected"],
+                    ["Cat", "Кошка", "Пиис", "пиис"],
+                ])
+                answers = iter(["", *khakas_answers])
+                completed = mr.review_file(
+                    path, input_fn=lambda _: next(answers), output=io.StringIO(),
+                )
+                with path.open(encoding="utf-8", newline="") as handle:
+                    row = next(csv.DictReader(handle))
+                self.assertEqual(completed, 1)
+                self.assertEqual(row["kjh_manually_corrected"], expected)
+                self.assertEqual(row["manual_reviewed"], "yes")
+                before = path.read_bytes()
+                self.assertEqual(mr.review_file(
+                    path, input_fn=lambda _: self.fail("Reviewed row shown again"),
+                    output=io.StringIO(),
+                ), 0)
+                self.assertEqual(path.read_bytes(), before)
 
     def test_manual_review_refuses_a_second_writer(self):
         mr = self._manual_review_module()

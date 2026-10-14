@@ -114,18 +114,27 @@ def _confirm_value(
     *,
     input_fn: Callable[[str], str],
     output: TextIO,
+    yandex: str | None = None,
 ) -> str:
-    answer = input_fn("ok? ")
-    if not answer.strip():
-        return default
-
-    candidate = _answer_or_default(answer, default)
+    candidate = default
+    # if yandex is not None:
+    #     output.write(
+    #         "y — Яндекс; b — Яндекс + текущий вариант; "
+    #         "Enter — подтвердить; другой текст — заменить.\n"
+    #     )
     while True:
-        output.write(f"Теперь {label}: {candidate or '(пусто)'}\n")
         answer = input_fn("ok? ")
         if not answer.strip():
             return candidate
-        candidate = _answer_or_default(answer, candidate)
+        if yandex is None:
+            candidate = _answer_or_default(answer, candidate)
+        elif answer == "y":
+            candidate = yandex
+        elif answer == "b":
+            candidate = "; ".join(value for value in (yandex, candidate) if value)
+        else:
+            candidate = answer
+        output.write(f"Теперь {label}: {candidate or '(пусто)'}\n")
 
 
 def review_file(
@@ -194,10 +203,14 @@ def _review_file_unlocked(
                 row["kjh_corrected"],
                 input_fn=input_fn,
                 output=output,
+                yandex=row["kjh_from_ru_by_yandex"],
             )
             row["manual_reviewed"] = "yes"
             _write_csv(path, fieldnames, rows)
             completed += 1
+            if output.isatty():
+                output.write("\033[2J\033[H")
+                output.flush()
             output.write("Сохранено.\n")
     except (KeyboardInterrupt, EOFError):
         output.write("\nПроверка остановлена. Уже завершённые строки сохранены.\n")

@@ -7,7 +7,17 @@ import pandas as pd
 
 md = MosesDetokenizer(lang='ru')
 mpn = MosesPunctNormalizer(lang="en")
-mpn.substitutions = [(re.compile(r), sub) for r, sub in mpn.substitutions]
+ignored_symbols = {'"', "'", '`', '«', '»', '“', '”', '„', '—', '–', '-'}
+
+mpn.substitutions = [
+    (re.compile(pattern), sub)
+    for regex, sub in mpn.substitutions
+    for pattern in [regex.pattern if isinstance(regex, re.Pattern) else regex]
+    if not any(sym in pattern or sym in sub for sym in ignored_symbols)
+]
+
+#mpn.substitutions = [(re.compile(r), sub) for r, sub in mpn.substitutions]
+#print(mpn.substitutions)
 
 
 def get_non_printing_char_replacer(replace_by: str = " "):
@@ -314,13 +324,13 @@ def main_final_cv():
 
 
 def main_ru_kjh_base():
-    df = pd.read_csv("/home/adeshkin/Downloads/diversity500_khakas.xlsx - Лист1.csv")
+    df = pd.read_csv("/home/adeshkin/Downloads/bouquet_test_inserted_fix_symbols.csv")
     print(df.columns)
-    for col in df.columns:
+    for col in ['kjh_Cyrl']:
         print(col)
         df[col] = df[col].apply(lambda x: detok_space_norm(preproc_data(x)).strip())
 
-    df.to_csv("/home/adeshkin/Downloads/diversity500_khakas.xlsx - Лист1_finalize.csv", index=False)
+    df.to_csv("/home/adeshkin/Downloads/bouquet_test_inserted_kjh_fix_symbols_finalize.csv", index=False)
 
 if __name__ == '__main__':
     main_ru_kjh_base()

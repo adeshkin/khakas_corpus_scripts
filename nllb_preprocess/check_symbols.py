@@ -75,34 +75,39 @@ def find_context_with_symbol(text, symbol):
 
 def check_symbols():
     # path = '../data/final/para_kjh_ru.csv'  # mono_kjh para_kjh_ru
-    path = '/home/adeshkin/Downloads/flores_dev_devtest_khakas/flores_dev_devtest_khakas/flores_dev_rus_kjh.csv'
+    path = '/home/adeshkin/Downloads/Алисаның Хайхастар Чирінзер чорығы [Алиса в стране чудес] - Льюис Кэрролл - Portlaoise_ Evertype, 2017 - перевод А. Щербаков _ М.Д. Чертыкова.csv'
     df = pd.read_csv(path)
+    df.dropna(inplace=True)
 
-    r_sents = df['rus'].tolist()
-    k_sents = df['kjh'].tolist()
+    r_sents = df['Хакасский'].tolist()
+    k_sents = df['Хакасский'].tolist()
 
     r_text = ' '.join(r_sents)
     print(repr(''.join(sorted(set(r_text)))))
     print()
+    for symbol in "VXІГ":
+        print(symbol)
+        print(unicodedata.name(symbol))
+        print()
 
-    k_text = ' '.join(k_sents)
-    print(repr(''.join(sorted(set(k_text)))))
-    print()
-
+    # k_text = ' '.join(k_sents)
+    # print(repr(''.join(sorted(set(k_text)))))
+    # print()
+    #
     assert 'ІіҒғңҷӦӧӰӱ' == 'ІіҒғңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
-    assert 'ІіҒғҢңҶҷӦӧӰӱ' == 'ІіҒғҢңҶҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
-
-    for symbol in 'OHA':
-        # examples = find_word_with_symbol(r_text, symbol)
-        examples = find_context_with_symbol(r_text, symbol)
-
-        if len(examples) > 0:
-            print(repr(symbol))
-            print(unicodedata.name(symbol))
-            print(len(examples))
-            # print(*examples, sep='\n')
-            print(examples)
-            print()
+    # assert 'ІіҒғҢңҶҷӦӧӰӱ' == 'ІіҒғҢңҶҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
+    #
+    # for symbol in 'OHA':
+    #     # examples = find_word_with_symbol(r_text, symbol)
+    #     examples = find_context_with_symbol(r_text, symbol)
+    #
+    #     if len(examples) > 0:
+    #         print(repr(symbol))
+    #         print(unicodedata.name(symbol))
+    #         print(len(examples))
+    #         # print(*examples, sep='\n')
+    #         print(examples)
+    #         print()
 
 
 def check_lat_cyr_word():
@@ -125,5 +130,5 @@ def check_lat_cyr_word1():
     find_lat_cyr_words(k_sents, print_latin=False)
 
 if __name__ == '__main__':
-    # check_symbols()
-    check_lat_cyr_word1()
+    check_symbols()
+    #check_lat_cyr_word1()

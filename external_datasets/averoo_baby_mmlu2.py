@@ -58,4 +58,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import pandas as pd
+
+
+    df = pd.read_parquet("hf://datasets/averoo/sumi/data/prompts.parquet")
+    print(df[['ru', 'kjh']].head())
+    # df[['ru', 'kjh']].to_csv(f'/home/adeshkin/Downloads/sumi_ru_kjh.csv', index=False)
