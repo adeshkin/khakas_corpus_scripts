@@ -99,8 +99,8 @@ def drop_vl():
 
 
 def drop_klr():
-    path = '../data/klr_fix_symbols.csv'
-    save_path = '../data/klr_fix_symbols_drop.csv'
+    path = '/home/adeshkin/Downloads/final_all_2026_fix_symbols.csv'
+    save_path = '/home/adeshkin/Downloads/final_all_2026_fix_symbols_drop.csv'
     assert not os.path.exists(save_path)
 
     df = pd.read_csv(path)
@@ -156,4 +156,4 @@ def drop_mono():
 
 
 if __name__ == "__main__":
-    drop_mono()
+    drop_klr()

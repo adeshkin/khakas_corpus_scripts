@@ -893,11 +893,14 @@ def replace_lat_cyr_bouquet(text):
         if lat_count == 1 and 'C' in word and cyr_count > lat_count:
             word = word.replace('C', 'С')
 
-        # if lat_count == 1 and 'c' in word and cyr_count > lat_count:
-        #     word = word.replace('c', 'с')
+        if lat_count == 1 and 'c' in word and cyr_count > lat_count:
+            word = word.replace('c', 'с')
 
-        # if lat_count == 1 and 'O' in word and cyr_count > lat_count:
-        #     word = word.replace('O', 'О')
+        if lat_count == 1 and 'O' in word and cyr_count > lat_count:
+            word = word.replace('O', 'О')
+
+        if lat_count == 1 and 'o' in word and cyr_count > lat_count:
+                    word = word.replace('o', 'о')
 
         return word
 
@@ -905,11 +908,10 @@ def replace_lat_cyr_bouquet(text):
     return re.sub(pattern, replace_match, text)
 
 def replace_bouquet_test(text):
-    old_new_dict = {'ӊ': 'ң',
-                    'ӌ': 'ҷ',
-                    ' ̃ӱчӱн,': ' ӱчӱн,',
-                    'ҷi': 'ҷі',
-                    'тимнeңер': 'тимнеңер'
+    old_new_dict = {'\xa0': ' ',
+                    'Ö': 'Ӧ',
+                    'тöстел': 'тӧстел',
+                    'Ӏ': 'І',
                     }
 
     for ch1, ch2 in old_new_dict.items():
@@ -918,15 +920,15 @@ def replace_bouquet_test(text):
     return text
 
 def fix_bouquet():
-    path = '/home/adeshkin/Downloads/bouquet_test_inserted_kjh_fix_symbols_finalize.csv'
-    save_path = '/home/adeshkin/Downloads/bouquet_test_inserted_fix_symbols.csv'
+    path = '/home/adeshkin/Downloads/final_all_2026.csv'
+    save_path = '/home/adeshkin/Downloads/final_all_2026_fix_symbols.csv'
     # assert not os.path.exists(save_path)
     df = pd.read_csv(path)
 
     #df['Русский'] = df['Русский'].apply(lambda x: replace_klr_ru(x).strip())
-    # df['kjh_Cyrl'] = df['kjh_Cyrl'].apply(lambda x: replace_lat_cyr_bouquet(replace_bouquet_test(x)))
+    df['Хакасский'] = df['Хакасский'].apply(lambda x: replace_lat_cyr_bouquet(replace_bouquet_test(x)))
 
-    sents = df['kjh_Cyrl'].tolist()
+    sents = df['Русский'].tolist()
 
     find_lat_cyr_words(sents, print_latin=False)
 
@@ -934,9 +936,9 @@ def fix_bouquet():
     print(repr(''.join(sorted(set(text)))))
     print()
 
-    assert 'іғҢңҷӦӧӰӱ' == 'іғҢңҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
+    assert 'ІіҒғҢңҶҷӦӧӰӱ' == 'ІіҒғҢңҶҷӦӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
 
-    for symbol in '': # ACEIMOXaceikmop
+    for symbol in 'іїғңҮҷӀӦӧөӰӱӳ': # ACEIMOXaceikmop
         examples = find_word_with_symbol(text, symbol)
         # examples = find_context_with_symbol(text, symbol)
 
@@ -948,7 +950,7 @@ def fix_bouquet():
             print(examples)
             print()
 
-    # df.to_csv(save_path, index=False)
+    df.to_csv(save_path, index=False)
 
 if __name__ == '__main__':
     # fix_til()

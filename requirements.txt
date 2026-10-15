@@ -1,4 +1,5 @@
 pandas
+datasets
 pypdf
 fluent.syntax
 requests
