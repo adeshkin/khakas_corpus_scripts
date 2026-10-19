@@ -1,5 +1,6 @@
 pandas
 datasets
+huggingface_hub
 pypdf
 fluent.syntax
 requests

@@ -62,24 +62,56 @@ def check():
     #     kjh_lower_but_ru_not) == 0, f"Найдено строк, где 'kjh' в нижнем регистре, а 'ru' — нет:\n{kjh_lower_but_ru_not.head()}"
     #
     # print(df)
-def push():
-    df = pd.read_csv("/home/adeshkin/Downloads/diversity500_khakas.xlsx - Лист1_finalize.csv")
-    df.rename(columns={'хакасский': 'kjh', 'русский': 'ru', 'источник': 'source'}, inplace=True)
+def push_new_dataset():
+    df = pd.read_csv("/home/adeshkin/Downloads/flores_plus_kjh_rus_dev.csv")
+    print(df.columns)
+    # df.rename(columns={'хакасский': 'kjh', 'русский': 'ru', 'источник': 'source'}, inplace=True)
     hf_dataset = Dataset.from_pandas(df, preserve_index=False)
 
-    REPOSITORY_ID = "adeshkin/yandex-russian-khakas-test-benchmark"
+    REPOSITORY_ID = "adeshkin/openlanguagedata-flores-plus"
     HF_TOKEN = ""
 
     hf_dataset.push_to_hub(
         repo_id=REPOSITORY_ID,
         token=HF_TOKEN,
+        split='dev'
     )
     #
     # print(f"Датасет успешно загружен в https://huggingface.co{REPOSITORY_ID}")
 
+
+def align_flores_translations(khakas, russian):
+    """Return Khakas and Russian FLORES+ texts aligned by sentence ID."""
+    if khakas["id"].duplicated().any() or russian["id"].duplicated().any():
+        raise ValueError("FLORES+ sentence IDs must be unique within a split")
+
+    khakas_ids = set(khakas["id"])
+    russian_ids = set(russian["id"])
+    if khakas_ids != russian_ids:
+        raise ValueError("Khakas and Russian FLORES+ sentence IDs do not match")
+
+    return khakas[["id", "text"]].rename(columns={"text": "kjh"}).merge(
+        russian[["id", "text"]].rename(columns={"text": "ru"}),
+        on="id",
+        how="left",
+        validate="one_to_one",
+        sort=False,
+    )
+
+
 def download_dataset():
-    ds = load_dataset("adeshkin/yandex-russian-khakas-test-benchmark", split="train")
-    ds.to_csv("/home/adeshkin/Downloads/yandex-russian-khakas-test-benchmark.csv", index=False)
+    khakas = load_dataset(
+        "openlanguagedata/flores_plus", "kjh_Cyrl", split="devtest"
+    ).to_pandas()
+    russian = load_dataset(
+        "openlanguagedata/flores_plus", "rus_Cyrl", split="devtest"
+    ).to_pandas()
+    aligned = align_flores_translations(khakas, russian)
+    aligned.to_csv(
+        "/home/adeshkin/Downloads/flores_plus_kjh_rus_devtest.csv",
+        index=False,
+    )
 
 if __name__ == '__main__':
-    download_dataset()
+    # download_dataset()
+    push_new_dataset()
