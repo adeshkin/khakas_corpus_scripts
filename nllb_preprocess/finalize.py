@@ -324,13 +324,13 @@ def main_final_cv():
 
 
 def main_ru_kjh_base():
-    df = pd.read_csv("/home/adeshkin/Downloads/final_all_2026_fix_symbols.csv")
+    df = pd.read_csv("/home/adeshkin/Downloads/sumi_ru_kjh - 1.csv")
     print(df.columns)
-    for col in ['Русский', 'Хакасский']:
+    for col in ['kjh_fixed']:
         print(col)
         df[col] = df[col].apply(lambda x: detok_space_norm(preproc_data(x)).strip())
 
-    df.to_csv("/home/adeshkin/Downloads/final_all_2026_fix_symbols_final.csv", index=False)
+    df.to_csv("/home/adeshkin/Downloads/sumi_ru_kjh - 1_final.csv", index=False)
 
 if __name__ == '__main__':
     main_ru_kjh_base()
