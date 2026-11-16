@@ -920,25 +920,26 @@ def replace_bouquet_test(text):
     return text
 
 def fix_bouquet():
-    path = '/home/adeshkin/Downloads/sumi_ru_kjh - 1.csv'
-    save_path = '/home/adeshkin/Downloads/sumi_ru_kjh_fix_symbols.csv'
+    path = '/home/adeshkin/Downloads/Copy of combined - combined.csv'
+    save_path = '/home/adeshkin/Downloads/Copy of combined - combined_fix_symbols.csv'
     # assert not os.path.exists(save_path)
     df = pd.read_csv(path)
+    df.fillna('', inplace=True)
 
     #df['Русский'] = df['Русский'].apply(lambda x: replace_klr_ru(x).strip())
     #df['kjh_fixed'] = df['Хакасский'].apply(lambda x: replace_lat_cyr_bouquet(replace_bouquet_test(x)))
 
-    sents = df['kjh_fixed'].tolist()
+    sents = df['kjh_correct'].tolist()
 
-    find_lat_cyr_words(sents, print_latin=False)
+    # find_lat_cyr_words(sents, print_latin=False)
 
     text = ' '.join(sents)
     print(repr(''.join(sorted(set(text)))))
     print()
 
-    assert 'іғңҷӧӰӱ' == 'іғңҷӧӰӱ'  # ІіҒғҢңҶҷӦӧӰӱ
+    assert 'іҒғңҷӧӱ' == 'іҒғңҷӧӱ'  # ІіҒғҢңҶҷӦӧӰӱ
 
-    for symbol in 'Х': # ACEIMOXaceikmop
+    for symbol in 'Geglo': # ACEIMOXaceikmop
         examples = find_word_with_symbol(text, symbol)
         # examples = find_context_with_symbol(text, symbol)
 
@@ -950,7 +951,7 @@ def fix_bouquet():
             print(examples)
             print()
 
-    df.to_csv(save_path, index=False)
+    # df.to_csv(save_path, index=False)
 
 if __name__ == '__main__':
     # fix_til()

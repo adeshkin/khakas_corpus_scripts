@@ -29,16 +29,16 @@ def main2():
 
 
 def main3():
-    ds = load_dataset("adeshkin/russian-khakas-base-phrases", split='train')
+    ds = load_dataset("adeshkin/khakas-russian-parallel-corpus", split='train')
     ds = ds.select_columns(['ru', 'kjh'])
     df = ds.to_pandas()
     print(df.columns)
     print(len(df))
-    df.to_csv('/home/adeshkin/khakas_projects/gatitos_review/russian-khakas-base-phrases.csv', index=False)
+    df.to_csv('/home/adeshkin/Downloads/khakas-russian-parallel-corpus.csv', index=False)
 
 
 if __name__ == '__main__':
-    main()
-    main1()
-    main2()
+    # main()
+    # main1()
+    # main2()
     main3()

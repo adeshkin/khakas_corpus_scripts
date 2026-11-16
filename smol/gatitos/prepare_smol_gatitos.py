@@ -15,35 +15,27 @@ def main():
              'gatitos__en_sah',
              'gatitos__en_tyv']
 
-    results = {}
-    en_sents = set()
+    # results = {}
+    en_sents = dict()
     for name in names:
-        results[name] = dict()
+        # results[name] = dict()
         ds = load_dataset("google/smol", name)
-        examples = []
+        # examples = []
         for example in ds['train']:
-            examples.append(example)
+            # examples.append(example)
+            assert example['sl'] == 'en'
+            assert example['is_source_orig']
+            en_sents.setdefault(example['src'], None)
 
-        for ex in examples:
-            assert ex['sl'] == 'en'
-            assert ex['is_source_orig']
-            en_sents.add(ex['src'])
-            if ex['src'] in results[name]:
-                results[name][ex['src']] = results[name][ex['src']] + ['###'] + ex['trgs']
-            else:
-                results[name][ex['src']] = ex['trgs']
+        # Код сбора переводов больше не нужен: сохраняем только английские
+        # исходные предложения из поля src.
+        # for ex in examples:
+        #     if ex['src'] in results[name]:
+        #         results[name][ex['src']] = results[name][ex['src']] + ['###'] + ex['trgs']
+        #     else:
+        #         results[name][ex['src']] = ex['trgs']
 
-    examples = []
-    for sent in en_sents:
-        example = [sent]
-        for name in names:
-            if sent in results[name]:
-                example.append(results[name][sent])
-            else:
-                example.append(None)
-        examples.append(example)
-
-    df = pd.DataFrame(examples, columns=['en'] + names)
+    df = pd.DataFrame(list(en_sents), columns=['en'])
     df.to_csv('smol_gatitos.csv', index=False)
 
 

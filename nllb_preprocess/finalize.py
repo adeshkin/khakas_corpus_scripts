@@ -324,13 +324,16 @@ def main_final_cv():
 
 
 def main_ru_kjh_base():
-    df = pd.read_csv("/home/adeshkin/Downloads/sumi_ru_kjh - 1.csv")
+    df = pd.read_csv("/home/adeshkin/Downloads/Copy of combined - combined.csv")
     print(df.columns)
-    for col in ['kjh_fixed']:
+    for col in ['en', 'ru_correct', 'kjh_correct']:
         print(col)
-        df[col] = df[col].apply(lambda x: detok_space_norm(preproc_data(x)).strip())
+        df[f'{col}_new'] = df[col].apply(lambda x: detok_space_norm(preproc_data(x)).strip())
+        diff_rows = df[df[col] != df[f'{col}_new']]
+        print(diff_rows[[col, f'{col}_new']])
 
-    df.to_csv("/home/adeshkin/Downloads/sumi_ru_kjh - 1_final.csv", index=False)
+
+    # df.to_csv("/home/adeshkin/Downloads/sumi_ru_kjh - 1_final.csv", index=False)
 
 if __name__ == '__main__':
     main_ru_kjh_base()

@@ -87,6 +87,83 @@ def prepare_smolsent_en_kjh():
             )
             f.write(line + "\n")
 
+def prepare_gatitos_en_kjh():
+    df1 = pd.read_csv('/home/adeshkin/Downloads/gatitos_final - combined.csv', keep_default_na=False)
+    df2 = pd.read_json('/home/adeshkin/khakas_projects/khakas_corpus_scripts/gatitos_review2/en_ady.jsonl', lines=True)
+    
+    assert len(df1) == len(df2)
+
+    df2['sl'] = 'en'
+    df2['tl'] = 'kjh'
+    
+    df2['src'] = df1['en']
+    df2['trgs'] = df1['kjh'].apply(lambda x: [x])
+    df2['is_source_orig'] = True
+
+    output_path = "/home/adeshkin/khakas_projects/khakas_corpus_scripts/gatitos_review2/en_kjh.jsonl"
+    with open(output_path, "w", encoding="utf-8") as f:
+        for record in df2.to_dict(orient="records"):
+            line = json.dumps(
+                record,
+                separators=(", ", ": "),
+                #ensure_ascii=False
+            )
+            f.write(line + "\n")
+
+    df2['sl'] = 'kjh'
+    df2['tl'] = 'en'
+    df2['src'] = df1['kjh']
+    df2['trgs'] = df1['en'].apply(lambda x: [x])
+    df2['is_source_orig'] = False
+
+    output_path = "/home/adeshkin/khakas_projects/khakas_corpus_scripts/gatitos_review2/kjh_en.jsonl"
+    with open(output_path, "w", encoding="utf-8") as f:
+        for record in df2.to_dict(orient="records"):
+            line = json.dumps(
+                record,
+                separators=(", ", ": "),
+                #ensure_ascii=False
+            )
+            f.write(line + "\n")
+
+def prepare_gatitos_ru_kjh():
+    df1 = pd.read_csv('/home/adeshkin/Downloads/gatitos_final - combined.csv', keep_default_na=False)
+    df2 = pd.read_json('/home/adeshkin/khakas_projects/khakas_corpus_scripts/gatitos_review2/en_ady.jsonl', lines=True)
+    
+    assert len(df1) == len(df2)
+
+    df2['sl'] = 'ru'
+    df2['tl'] = 'kjh'
+    
+    df2['src'] = df1['ru']
+    df2['trgs'] = df1['kjh'].apply(lambda x: [x])
+    df2['is_source_orig'] = True
+
+    output_path = "/home/adeshkin/khakas_projects/khakas_corpus_scripts/gatitos_review2/ru_kjh.jsonl"
+    with open(output_path, "w", encoding="utf-8") as f:
+        for record in df2.to_dict(orient="records"):
+            line = json.dumps(
+                record,
+                separators=(", ", ": "),
+                #ensure_ascii=False
+            )
+            f.write(line + "\n")
+
+    df2['sl'] = 'kjh'
+    df2['tl'] = 'ru'
+    df2['src'] = df1['kjh']
+    df2['trgs'] = df1['ru'].apply(lambda x: [x])
+    df2['is_source_orig'] = False
+
+    output_path = "/home/adeshkin/khakas_projects/khakas_corpus_scripts/gatitos_review2/kjh_ru.jsonl"
+    with open(output_path, "w", encoding="utf-8") as f:
+        for record in df2.to_dict(orient="records"):
+            line = json.dumps(
+                record,
+                separators=(", ", ": "),
+                #ensure_ascii=False
+            )
+            f.write(line + "\n")
 
 def prepare_smoldoc_ru_kjh():
     df = pd.read_parquet("hf://datasets/adeshkin/google-smol-en-ru-kjh/smoldoc/train-00000-of-00001.parquet")
@@ -267,11 +344,13 @@ def check_smoldoc():
 if __name__ == '__main__':
     # prepare_smolsent_ru_kjh()
     # prepare_smoldoc_ru_kjh()
-    pd.set_option('display.max_colwidth', None)
-    df = pd.read_json('/home/adeshkin/khakas_projects/smol/smoldoc/ru_kjh.jsonl', lines=True)
-    pairs = df[['srcs', 'trgs']].values.tolist()
-    pair = random.choice(pairs)
-    for sent1, sent2 in zip(pair[0], pair[1]):
-        print(sent1)
-        print(sent2)
-        print()
+    # pd.set_option('display.max_colwidth', None)
+    # df = pd.read_json('/home/adeshkin/khakas_projects/smol/smoldoc/ru_kjh.jsonl', lines=True)
+    # pairs = df[['srcs', 'trgs']].values.tolist()
+    # pair = random.choice(pairs)
+    # for sent1, sent2 in zip(pair[0], pair[1]):
+    #     print(sent1)
+    #     print(sent2)
+    #     print()
+    prepare_gatitos_en_kjh()
+    prepare_gatitos_ru_kjh()
